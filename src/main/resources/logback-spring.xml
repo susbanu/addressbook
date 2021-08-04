@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+	<property name="APPLOG_DIR" value="${LOG_DIR}" />
+
+	<appender name="ROLLING_FILE"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${APPLOG_DIR}</file>
+
+		<rollingPolicy
+			class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<fileNamePattern>logs/archived/address-book-app.%d{yyyy-MM-dd}.%i.log
+			</fileNamePattern>
+			<!-- each archived file, size max 10MB -->
+			<maxFileSize>5MB</maxFileSize>
+			<!-- total size of all archive files, if total size > 20GB, it will delete 
+				old archived file -->
+			<totalSizeCap>100MB</totalSizeCap>
+			<!-- 60 days to keep -->
+			<maxHistory>60</maxHistory>
+		</rollingPolicy>
+
+		<encoder>
+			<pattern>%d %p %c{1.} [%t] %m%n</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<Pattern>%d %p %c{1.} [%t] %m%n</Pattern>
+		</layout>
+	</appender>
+	
+	<!-- Application logger level - INFO -->
+	<logger name="com.address" level="INFO" additivity="false">
+		<appender-ref ref="ROLLING_FILE" />
+		<appender-ref ref="CONSOLE" />
+	</logger>
+
+	<!-- ROOT logger level - ERROR -->
+	<root level="${LOGGER_LEVEL}">
+		<appender-ref ref="ROLLING_FILE" />
+		<appender-ref ref="CONSOLE" />
+	</root>
+
+</configuration>
